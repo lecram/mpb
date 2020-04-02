@@ -1,60 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 static unsigned width;
 static char spinchars[] = "|/-\\";
 static unsigned spinindex;
 static char line[(1 << 12) + 1];
-
-void
-hide_cursor()
-{
-    printf("\x1B[?25l");
-    fflush(stdout);
-}
-
-void
-show_cursor()
-{
-    printf("\x1B[?25h");
-    fflush(stdout);
-}
+static unsigned lastfill = UINT_MAX;
 
 void
 print_bar(unsigned long percent)
 {
-    unsigned i, n;
-    n = percent * width / 100;
+    unsigned i, fill;
+    fill = percent * width / 100;
     if (percent % 100 == 0)
         spinindex = 0;
-    printf("\r (%c) [", spinchars[spinindex++]);
+    printf(" (%c) [", spinchars[spinindex++]);
     spinindex %= sizeof(spinchars) - 1;
-    for (i = 0; i < n; i++)
-        putchar('#');
-    for (; i < width; i++)
-        putchar('-');
-    printf("] %3lu%%", percent);
+    if (fill != lastfill) {
+        for (i = 0; i < fill; i++)
+            putchar('#');
+        for (; i < width; i++)
+            putchar('-');
+        lastfill = fill;
+    } else {
+        printf("\x1B[%uC", width);
+    }
+    printf("] %3lu%%\r", percent);
     fflush(stdout);
 }
 
 int
 main(int argc, char *argv[])
 {
-    int ret = 0;
     unsigned long count, total, percent;
     if (argc != 2) {
         fprintf(stderr, "usage:\n  %s total\n", argv[0]);
-        ret = 1;
-        goto quit;
+        return 1;
     }
     total = (unsigned) atol(argv[1]);
     if (total == 0) {
         fprintf(stderr, "total must be nonzero\n");
-        ret = 1;
-        goto quit;
+        return 1;
     }
     width = 32;
-    hide_cursor();
     print_bar(0);
     count = 0;
     while (scanf("%s", line) != EOF) {
@@ -64,8 +53,6 @@ main(int argc, char *argv[])
         print_bar(percent);
     }
     print_bar(100);
-quit:
-    show_cursor();
     puts("");
-    return ret;
+    return 0;
 }
