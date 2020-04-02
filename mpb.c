@@ -10,7 +10,7 @@ static unsigned lastfill = UINT_MAX;
 static unsigned lastpercent = 101;
 
 void
-print_bar(unsigned long percent)
+print_bar(unsigned percent)
 {
     unsigned i, fill;
     fill = percent * width / 100;
@@ -28,7 +28,7 @@ print_bar(unsigned long percent)
         printf("\x1B[%uC", width);
     }
     if (percent != lastpercent) {
-        printf("] %3lu%%", percent);
+        printf("] %3u%%", percent);
         lastpercent = percent;
     }
     printf("\r");
@@ -38,7 +38,8 @@ print_bar(unsigned long percent)
 int
 main(int argc, char *argv[])
 {
-    unsigned long count, total, percent;
+    unsigned long count, total;
+    unsigned percent;
     if (argc != 2) {
         fprintf(stderr, "usage:\n  %s total\n", argv[0]);
         return 1;
