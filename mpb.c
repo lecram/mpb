@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <poll.h>
 
 static unsigned width;
 static char spinchars[] = "|/-\\";
 static unsigned spinindex;
+static char line[(1 << 12) + 1];
 
 void
 hide_cursor()
@@ -56,8 +56,10 @@ main(int argc, char *argv[])
     width = 32;
     hide_cursor();
     print_bar(0);
-    for (count = 0; count < total; count++) {
-        poll(NULL, 0, 25);
+    count = 0;
+    while (scanf("%s", line) != EOF) {
+        if (count < total)
+            count++;
         percent = count * 100 / total;
         print_bar(percent);
     }
