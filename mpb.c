@@ -7,6 +7,7 @@ static char spinchars[] = "|/-\\";
 static unsigned spinindex;
 static char line[(1 << 12) + 1];
 static unsigned lastfill = UINT_MAX;
+static unsigned lastpercent = 101;
 
 void
 print_bar(unsigned long percent)
@@ -26,7 +27,11 @@ print_bar(unsigned long percent)
     } else {
         printf("\x1B[%uC", width);
     }
-    printf("] %3lu%%\r", percent);
+    if (percent != lastpercent) {
+        printf("] %3lu%%", percent);
+        lastpercent = percent;
+    }
+    printf("\r");
     fflush(stdout);
 }
 
