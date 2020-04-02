@@ -53,7 +53,7 @@ main(int argc, char *argv[])
     int i;
     char *arg;
     char *argtotal = NULL;
-    int opt_showbar = 0;
+    int opt_showbar;
     int opt_showline = 0;
     int opt_showspinner = 0;
     unsigned long total = 0;
@@ -77,18 +77,16 @@ main(int argc, char *argv[])
             argtotal = arg;
         }
     }
-    if (argtotal != NULL) {
+    if (argtotal != NULL)
         total = (unsigned) atol(argtotal);
-        if (total)
-            opt_showbar = 1;
-    }
+    opt_showbar = total > 0;
     width = 32;
     print_progress(0, opt_showbar, opt_showspinner, 0);
     count = 0;
     while (scanf("%s", line) != EOF) {
         if (count < total)
             count++;
-        if (total)
+        if (opt_showbar)
             percent = count * 100 / total;
         print_progress(percent, opt_showbar, opt_showspinner, opt_showline);
     }
