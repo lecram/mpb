@@ -3,6 +3,8 @@
 #include <poll.h>
 
 static unsigned width;
+static char spinchars[] = "|/-\\";
+static unsigned spinindex;
 
 void
 hide_cursor()
@@ -23,7 +25,10 @@ print_bar(unsigned long percent)
 {
     unsigned i, n;
     n = percent * width / 100;
-    printf("\r[");
+    if (percent % 100 == 0)
+        spinindex = 0;
+    printf("\r (%c) [", spinchars[spinindex++]);
+    spinindex %= sizeof(spinchars) - 1;
     for (i = 0; i < n; i++)
         putchar('#');
     for (; i < width; i++)
