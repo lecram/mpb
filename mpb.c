@@ -10,7 +10,7 @@ static unsigned lastfill = UINT_MAX;
 static unsigned lastpercent = 101;
 
 void
-print_bar(unsigned percent)
+print_bar(unsigned percent, int showline)
 {
     unsigned i, fill;
     fill = percent * width / 100;
@@ -32,6 +32,8 @@ print_bar(unsigned percent)
         lastpercent = percent;
     }
     printf("\r");
+    if (showline)
+        printf("\x1B[B%s\r\x1B[A", line);
     fflush(stdout);
 }
 
@@ -50,15 +52,15 @@ main(int argc, char *argv[])
         return 1;
     }
     width = 32;
-    print_bar(0);
+    print_bar(0, 0);
     count = 0;
     while (scanf("%s", line) != EOF) {
         if (count < total)
             count++;
         percent = count * 100 / total;
-        print_bar(percent);
+        print_bar(percent, 1);
     }
-    print_bar(100);
-    puts("");
+    print_bar(100, 0);
+    puts("\x1B[B\x1B[2K\x1B[A");
     return 0;
 }
