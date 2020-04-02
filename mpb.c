@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <poll.h>
 
+static unsigned width;
+
 void
 hide_cursor()
 {
@@ -19,7 +21,14 @@ show_cursor()
 void
 print_bar(unsigned long percent)
 {
-    printf("\r%3lu%%", percent);
+    unsigned i, n;
+    n = percent * width / 100;
+    printf("\r[");
+    for (i = 0; i < n; i++)
+        putchar('#');
+    for (; i < width; i++)
+        putchar('-');
+    printf("] %3lu%%", percent);
     fflush(stdout);
 }
 
@@ -39,6 +48,7 @@ main(int argc, char *argv[])
         ret = 1;
         goto quit;
     }
+    width = 32;
     hide_cursor();
     print_bar(0);
     for (count = 0; count < total; count++) {
