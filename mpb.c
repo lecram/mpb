@@ -5,7 +5,7 @@
 static unsigned width;
 static char spinchars[] = "|/-\\";
 static unsigned spinindex = 0;
-static char line[(1 << 12) + 1];
+static char line[4096 + 1];
 static unsigned lastfill = UINT_MAX;
 static unsigned lastpercent = 101;
 
@@ -83,7 +83,7 @@ main(int argc, char *argv[])
     width = 32;
     print_progress(0, opt_showbar, opt_showspinner, 0);
     count = 0;
-    while (scanf("%s", line) != EOF) {
+    while (scanf("%4096s", line) != EOF) {
         if (count < total)
             count++;
         if (opt_showbar)
