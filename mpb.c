@@ -93,6 +93,8 @@ main(int argc, char *argv[])
     if (argtotal != NULL)
         total = (unsigned) atol(argtotal);
     opt_showbar = total > 0;
+    if (opt_showbar)
+        printf("\n\x1B[A");
     print_progress(opt_width, 0, opt_showbar, opt_showspinner, 0);
     count = 0;
     while (scanf("%4096s", line) != EOF) {
