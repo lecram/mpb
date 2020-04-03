@@ -62,6 +62,7 @@ main(int argc, char *argv[])
     unsigned long count;
     unsigned percent;
     int i;
+    char *c;
     char *arg;
     char *argtotal = NULL;
     int opt_showbar;
@@ -108,13 +109,15 @@ main(int argc, char *argv[])
     print_progress(opt_width, 0, opt_showbar, opt_showspinner, 0);
     count = 0;
     while (fgets(line, LINE_MAX, stdin) != NULL) {
+        if (opt_output)
+            printf(line);
+        for (c = line; *c && *c != '\n'; c++) ;
+        *c = '\0';
         if (count < total)
             count++;
         if (opt_showbar)
             percent = count * 100 / total;
         print_progress(opt_width, percent, opt_showbar, opt_showspinner, opt_showline);
-        if (opt_output)
-            printf(line);
     }
     print_progress(opt_width, 100, opt_showbar, opt_showspinner, 0);
     fputs("\x1B[B\x1B[2K\x1B[A\n", stderr);
