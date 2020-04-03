@@ -48,9 +48,9 @@ print_progress(unsigned width, unsigned percent, int showbar, int showspinner, i
         }
         fprintf(stderr, "\r");
         if (showline)
-            fprintf(stderr, "\x1B[B%s\r\x1B[A", line);
+            fprintf(stderr, "\x1B[B%s\x1B[K\r\x1B[A", line);
     } else if (showline) {
-        fprintf(stderr, " %s", line);
+        fprintf(stderr, " %s\x1B[K", line);
     }
     fprintf(stderr, "\r");
     fflush(stderr);
