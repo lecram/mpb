@@ -3,10 +3,11 @@
 #include <limits.h>
 
 #define DEFAULT_WIDTH   32
+#define LINE_MAX        (1 << 12)
 
 static char spinchars[] = "|/-\\";
 static unsigned spinindex = 0;
-static char line[4096 + 1];
+static char line[LINE_MAX];
 static unsigned lastfill = UINT_MAX;
 static unsigned lastpercent = 101;
 
@@ -101,14 +102,14 @@ main(int argc, char *argv[])
         fprintf(stderr, "\n\x1B[A");
     print_progress(opt_width, 0, opt_showbar, opt_showspinner, 0);
     count = 0;
-    while (scanf("%4096s", line) != EOF) {
+    while (fgets(line, LINE_MAX, stdin) != NULL) {
         if (count < total)
             count++;
         if (opt_showbar)
             percent = count * 100 / total;
         print_progress(opt_width, percent, opt_showbar, opt_showspinner, opt_showline);
         if (opt_output)
-            puts(line);
+            printf(line);
     }
     print_progress(opt_width, 100, opt_showbar, opt_showspinner, 0);
     fputs("\x1B[B\x1B[2K\x1B[A\n", stderr);
