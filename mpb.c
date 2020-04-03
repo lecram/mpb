@@ -23,8 +23,12 @@ print_progress(unsigned width, unsigned percent, int showbar, int showspinner, i
     }
     if (showbar) {
         if (fill != lastfill) {
+            if (lastfill > width)
+                lastfill = 0;
             printf(" [");
-            for (i = 0; i < fill; i++)
+            if (lastfill)
+                printf("\x1B[%uC", lastfill);
+            for (i = lastfill; i < fill; i++)
                 putchar('#');
             for (; i < width; i++)
                 putchar('-');
