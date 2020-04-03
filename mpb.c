@@ -18,36 +18,36 @@ print_progress(unsigned width, unsigned percent, int showbar, int showspinner, i
     if (showspinner) {
         if (percent == 100)
             spinindex = 0;
-        printf(" (%c)", spinchars[spinindex++]);
+        fprintf(stderr, " (%c)", spinchars[spinindex++]);
         spinindex %= sizeof(spinchars) - 1;
     }
     if (showbar) {
         if (fill != lastfill) {
             if (lastfill > width)
                 lastfill = 0;
-            printf(" [");
+            fprintf(stderr, " [");
             if (lastfill)
-                printf("\x1B[%uC", lastfill);
+                fprintf(stderr, "\x1B[%uC", lastfill);
             for (i = lastfill; i < fill; i++)
-                putchar('#');
+                fputc('#', stderr);
             for (; i < width; i++)
-                putchar('-');
+                fputc('-', stderr);
             lastfill = fill;
         } else {
-            printf("\x1B[%uC", width + 2);
+            fprintf(stderr, "\x1B[%uC", width + 2);
         }
         if (percent != lastpercent) {
-            printf("] %3u%%", percent);
+            fprintf(stderr, "] %3u%%", percent);
             lastpercent = percent;
         }
-        printf("\r");
+        fprintf(stderr, "\r");
         if (showline)
-            printf("\x1B[B%s\r\x1B[A", line);
+            fprintf(stderr, "\x1B[B%s\r\x1B[A", line);
     } else if (showline) {
-        printf(" %s", line);
+        fprintf(stderr, " %s", line);
     }
-    printf("\r");
-    fflush(stdout);
+    fprintf(stderr, "\r");
+    fflush(stderr);
 }
 
 int
@@ -61,6 +61,7 @@ main(int argc, char *argv[])
     int opt_showbar;
     int opt_showline = 0;
     int opt_showspinner = 0;
+    int opt_output = 0;
     unsigned opt_width = DEFAULT_WIDTH;
     unsigned long total = 0;
     for (i = 1; i < argc; i++) {
@@ -73,6 +74,9 @@ main(int argc, char *argv[])
                     break;
                 case 's':
                     opt_showspinner = 1;
+                    break;
+                case 'o':
+                    opt_output = 1;
                     break;
                 case 'w':
                     opt_width = (unsigned) strtol(arg+1, &arg, 10);
@@ -94,7 +98,7 @@ main(int argc, char *argv[])
         total = (unsigned) atol(argtotal);
     opt_showbar = total > 0;
     if (opt_showbar)
-        printf("\n\x1B[A");
+        fprintf(stderr, "\n\x1B[A");
     print_progress(opt_width, 0, opt_showbar, opt_showspinner, 0);
     count = 0;
     while (scanf("%4096s", line) != EOF) {
@@ -103,8 +107,10 @@ main(int argc, char *argv[])
         if (opt_showbar)
             percent = count * 100 / total;
         print_progress(opt_width, percent, opt_showbar, opt_showspinner, opt_showline);
+        if (opt_output)
+            puts(line);
     }
     print_progress(opt_width, 100, opt_showbar, opt_showspinner, 0);
-    puts("\x1B[B\x1B[2K\x1B[A");
+    fputs("\x1B[B\x1B[2K\x1B[A\n", stderr);
     return 0;
 }
