@@ -27,9 +27,14 @@ OPTIONS
 
 EXAMPLES
        Use seq(1) to test drive mpb:
-              $ n=5000; seq 1 $n | mpb -vsw50 $n
+              $ n=5000; seq $n | mpb -vsw50 $n
 
-       Show progress of tar(1) extraction:
+       Show path of file currently being extracted by tar(1) (without progress
+       bar):
+              $ tar vxf foo.tgz | mpb -v
+
+       Pre-compute the number of files in archive to add extraction progress
+       bar:
               $ f=foo.tgz; n=$(tar tf $f | wc -l); tar vxf $f | mpb -v $n
 
 

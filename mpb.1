@@ -28,11 +28,18 @@ if \fITOTAL\fR is not given or it is zero, the progress bar will not be shown
 Use \fBseq(1)\fR to test drive \fBmpb\fR:
 .RS
 .nf
-$ n=5000; seq 1 $n | mpb -vsw50 $n
+$ n=5000; seq $n | mpb -vsw50 $n
 .fi
 .RE
 .PP
-Show progress of \fBtar(1)\fR extraction:
+Show path of file currently being extracted by \fBtar(1)\fR (without progress bar):
+.RS
+.nf
+$ tar vxf foo.tgz | mpb -v
+.fi
+.RE
+.PP
+Pre-compute the number of files in archive to add extraction progress bar:
 .RS
 .nf
 $ f=foo.tgz; n=$(tar tf $f | wc -l); tar vxf $f | mpb -v $n
