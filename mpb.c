@@ -31,8 +31,13 @@ print_progress(unsigned width, unsigned percent, int showbar, int showspinner, i
                 fprintf(stderr, "\x1B[%uC", lastfill);
             for (i = lastfill; i < fill; i++)
                 fputc('#', stderr);
-            for (; i < width; i++)
-                fputc('-', stderr);
+            if (!percent) {
+                for (; i < width; i++)
+                    fputc('-', stderr);
+            } else {
+                if (fill < width)
+                    fprintf(stderr, "\x1B[%uC", width - fill);
+            }
             lastfill = fill;
         } else {
             fprintf(stderr, "\x1B[%uC", width + 2);
