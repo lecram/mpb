@@ -1,0 +1,38 @@
+.TH MPB 1
+.SH NAME
+mpb \- more progress bar
+.SH SYNOPSIS
+.B mpb
+[\fB\-v\fR] [\fB\-s\fR] [\fB\-w\fR\fIWIDTH\fR] [\fITOTAL\fR]
+.SH DESCRIPTION
+Show progress of lines read from \fIstdin\fR.
+.SH OPTIONS
+.TP
+\fB\-v\fR
+show current line
+.TP
+\fB\-s\fR
+show activity spinner
+.TP
+\fB\-w\fR\fIWIDTH\fR
+set width of progress bar (default = 32)
+.TP
+\fITOTAL\fR
+number of lines expected to be read until completion of task
+.br
+if \fITOTAL\fR is not given or it's zero, the progress bar will not be shown
+.SH EXAMPLES
+.PP
+Use \fBseq(1)\fR to test drive \fBmpb\fR:
+.RS
+.nf
+    $ n=5000; seq 1 $n | mpb -vsw50 $n
+.fi
+.RE
+.PP
+Show progress of \fBtar(1)\fR extraction:
+.RS
+.nf
+    $ f=foo.tgz; n=$(tar tf $f | wc -l); tar vxf $f | mpb -v $n
+.fi
+.RE
