@@ -1,0 +1,35 @@
+MPB(1)                      General Commands Manual                     MPB(1)
+
+
+
+NNAAMMEE
+       mpb - more progress bar
+
+SSYYNNOOPPSSIISS
+       mmppbb [--vv] [--ss] [--ww_W_I_D_T_H] [_T_O_T_A_L]
+
+DDEESSCCRRIIPPTTIIOONN
+       Show progress of lines read from _s_t_d_i_n.
+
+OOPPTTIIOONNSS
+       --vv     show current line
+
+       --ss     show activity spinner
+
+       --ww_W_I_D_T_H
+              set width of progress bar (default = 32)
+
+       _T_O_T_A_L  number of lines expected to be read until completion of task
+              if _T_O_T_A_L is not given or it's zero, the progress bar will not be
+              shown
+
+EEXXAAMMPPLLEESS
+       Use sseeqq((11)) to test drive mmppbb:
+                  $ n=5000; seq 1 $n | mpb -vsw50 $n
+
+       Show progress of ttaarr((11)) extraction:
+                  $ f=foo.tgz; n=$(tar tf $f | wc -l); tar vxf $f | mpb -v $n
+
+
+
+                                  2020-04-02                            MPB(1)
