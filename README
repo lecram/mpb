@@ -6,12 +6,14 @@ NNAAMMEE
        mpb - more progress bar
 
 SSYYNNOOPPSSIISS
-       mmppbb [--vv] [--ss] [--ww_W_I_D_T_H] [_T_O_T_A_L]
+       mmppbb [--oo] [--vv] [--ss] [--ww_W_I_D_T_H] [_T_O_T_A_L]
 
 DDEESSCCRRIIPPTTIIOONN
        Show progress of lines read from _s_t_d_i_n.
 
 OOPPTTIIOONNSS
+       --oo     output _s_t_d_i_n to _s_t_d_o_u_t
+
        --vv     show current line
 
        --ss     show activity spinner
